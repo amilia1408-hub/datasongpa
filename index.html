@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>읽기 설문</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+  <div id="progressText" class="progress-text"></div>
+
+  <!-- 화면 0: 표지 + 동의 -->
+  <section class="screen" id="screen0" data-screen="0">
+    <div class="card">
+      <h1 class="title">중학생의 독해력에 대한 자기평가와 텍스트 선택 연구</h1>
+      <p class="subtitle">― 읽기 성취정서 프로파일을 중심으로</p>
+      <div class="researcher-info">
+        <p><span class="ri-label">연구자</span><span class="ri-text">황현지 (서울여자고등학교 교사, 고려대학교 일반대학원 국어교육학과 석사과정)</span></p>
+        <p><span class="ri-label">지도교수</span><span class="ri-text">이순영 (고려대학교 국어교육과 교수)</span></p>
+        <p><span class="ri-label">문의</span><span class="ri-text">anjilhyun@korea.ac.kr</span></p>
+      </div>
+
+      <div class="notice">
+        <p class="notice-head">연구 목적</p>
+        <p>안녕하세요? 본 연구는 중학교 3학년의 읽기 성취정서(achievement emotions)를 확인하고, 읽기 성취정서와 읽기 능력에 대한 자기평가, 텍스트 선택의 관계를 살펴보기 위해 마련되었습니다.</p>
+        <p>본 연구에서는 2가지 설문(독해력에 대한 자기평가, 읽기 성취정서)와 1가지 과제(텍스트 선택 과제; 선택 이유 설문 포함)를 시행합니다. 검사 및 과제 결과를 바탕으로 읽기 성취정서를 확인하고 읽기 관련 메타인지와 수행의 양상을 살펴봄으로써 학생의 읽기 성취정서별 맞춤형 읽기 교육 내용 및 방법의 토대를 세우고자 합니다.</p>
+        <p class="notice-head">연구 참여 안내</p>
+        <p>본 연구에 참여한다는 것은 독해력에 대한 자기평가 검사 결과, 읽기 성취정서 검사 결과, 독해력 검사 결과, 텍스트 선택 과제 결과, 텍스트 선택 이유 설문 결과를 연구자에게 공개하고 공유한다는 것을 의미합니다. 공유해주신 귀한 자료는 오직 연구 목적으로만 사용되며, 연구자의 관리 아래 철저히 보호된 후, 연구 종료 시점에서 모든 정보는 폐기됩니다.</p>
+        <p>참여자의 의사에 따라 연구에 참여하지 않아도 되며, 연구 참여 도중 언제든지 중단 의사를 밝힐 수 있음을 알려드립니다. 연구와 관련된 문의 사항이 있으신 경우, 연구자에게 연락 부탁드립니다. 감사합니다.</p>
+      </div>
+
+      <div class="field">
+        <label for="studentId">학번</label>
+        <input type="text" id="studentId" inputmode="numeric" placeholder="예: 30101">
+      </div>
+      <div class="field">
+        <label for="studentName">이름</label>
+        <input type="text" id="studentName" placeholder="이름을 입력하세요">
+      </div>
+      <div class="field">
+        <label>성별</label>
+        <div class="radio-row">
+          <label class="radio-box"><input type="radio" name="gender" value="남"> 남</label>
+          <label class="radio-box"><input type="radio" name="gender" value="여"> 여</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="guardianName">보호자 이름</label>
+        <input type="text" id="guardianName" placeholder="보호자 이름을 입력하세요">
+      </div>
+
+      <label class="consent-box"><input type="checkbox" id="consent"> 위 내용을 읽고 연구 참여에 동의합니다.</label>
+
+      <p class="error-msg" id="error0"></p>
+      <button class="btn btn-primary" id="btnScreen0Next" disabled>동의하고 시작하기</button>
+    </div>
+  </section>
+
+  <!-- 화면 1: 안내 -->
+  <section class="screen hidden" id="screen1" data-screen="1">
+    <div class="card center card-yellow">
+      <p class="big-notice">
+        주어진 텍스트를 넘겨보기 전,<br>
+        다음 문항에 응답해주세요.<br><br>
+        본 문항은 평가에 반영되지 않으니<br>
+        솔직하게 응답해주세요.
+      </p>
+      <div class="btn-row center">
+        <button class="btn btn-primary" id="btnScreen1Next">응답하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 2: 읽기 능력 자기평가 (6점) -->
+  <section class="screen hidden" id="screen2" data-screen="2">
+    <div class="card">
+      <p class="notice">
+        여러분은 자신이 얼마나 잘 읽는다고 생각하나요? 자신의 읽기 능력에 대한 생각을 묻는 문항입니다.
+        평가에는 반영되지 않으니, 솔직하게 응답해주세요.
+      </p>
+      <div id="selfQuestions"></div>
+      <p class="error-msg" id="error2"></p>
+      <div class="btn-row right">
+        <button class="btn btn-primary" id="btnScreen2Next" disabled>다음</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 3: 읽기 성취정서 (36문항, 5점) -->
+  <section class="screen hidden" id="screen3" data-screen="3">
+    <div class="card">
+      <p class="notice">
+        <strong class="emph-lg phrase-red">학교 수업 시간(국어 및 다른 과목 모두) 중 글을 읽을 때, 숙제나 공부를 하기 위해</strong>
+        글을 읽을 때 <u><strong>주로 느끼는 감정</strong></u>을 떠올려 응답해주세요.<br>
+        평가에는 반영되지 않으니 솔직하게 응답해주세요.
+      </p>
+      <div id="emotionQuestions"></div>
+      <p class="error-msg" id="error3"></p>
+      <div class="btn-row right">
+        <button class="btn btn-primary" id="btnScreen3Next" disabled>다음</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 4: 주제 흥미·관심 (6문항, 5점) -->
+  <section class="screen hidden" id="screen4" data-screen="4">
+    <div class="card">
+      <p class="notice">아래 문항을 읽고 자신에게 해당하는 곳을 선택해주세요.</p>
+      <div id="interestQuestions"></div>
+      <p class="error-msg" id="error4"></p>
+      <div class="btn-row right">
+        <button class="btn btn-primary" id="btnScreen4Next" disabled>응답 종료</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 5: 안내 -->
+  <section class="screen hidden" id="screen5" data-screen="5">
+    <div class="card center card-yellow">
+      <p class="big-notice">
+        자, 이제 종이로 된 페이지를 넘겨<br>
+        제공된 5개의 글을 읽고<br>
+        활동지에 응답해주세요.<br><br>
+        원한다면 각 글을 뜯어 분리하여서 읽어도 됩니다.<br><br>
+        여러분의 솔직한 응답이 매우 궁금합니다!<br><br>
+        성실하고 자세하게 끝까지 응답 부탁드립니다.
+      </p>
+      <div class="btn-row center">
+        <button class="btn btn-primary" id="btnScreen5Next">평가 시작</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 6: A~E 글 평가 -->
+  <section class="screen hidden" id="screen6" data-screen="6">
+    <div class="card">
+      <p class="notice">
+        종이로 제공된 글 상단의 A~E 표시를 확인하며 응답하세요.<br>
+        각각의 글이 <u><strong>내가 읽기에 쉬운지 어려운지</strong></u> 표시하고
+        그렇게 생각한 이유를 적어봅시다.
+      </p>
+      <div id="textQuestions"></div>
+      <p class="error-msg" id="error6"></p>
+      <div class="btn-row right">
+        <button class="btn btn-primary" id="btnScreen6Next" disabled>선택 시작</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 7: 글 선택 -->
+  <section class="screen hidden" id="screen7" data-screen="7">
+    <div class="card">
+      <p class="notice notice-lg">
+        여러분이 <u><strong class="emph-lg">'우주의 팽창'에 대해 공부하고 싶어서 글을 찾아보았는데,</strong></u>
+        방금 읽었던 5개의 글을 찾을 수 있었습니다.<br><br>
+        <u><strong class="emph-lg phrase-red">'우주의 팽창'에 대해 공부하기 위해</strong></u>
+        주어진 <u><strong class="emph-lg phrase-red">5개의 글 중 하나를 선택</strong></u>하면 무엇을 선택할 것인가요?
+      </p>
+      <div class="radio-row vertical" id="choiceRadios"></div>
+      <p class="error-msg" id="error7"></p>
+    </div>
+  </section>
+
+  <!-- 화면 8: 선택 이유 -->
+  <section class="screen hidden" id="screen8" data-screen="8">
+    <div class="card">
+      <p class="notice notice-lg" id="screen8Notice"></p>
+      <div class="field">
+        <textarea id="finalReason" rows="6" placeholder="이유를 자세하고 솔직하게 적어주세요(최소 5자 이상)"></textarea>
+      </div>
+      <p class="error-msg" id="error8"></p>
+      <div class="btn-row right">
+        <button class="btn btn-primary" id="btnSubmit">제출하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 완료 화면 -->
+  <section class="screen hidden" id="screenDone" data-screen="done">
+    <div class="card center">
+      <p class="big-notice" id="doneMessage">성실하게 응답해주셔서 감사합니다.</p>
+      <p class="confirm-notice">선생님께 이 화면을 보여주고 제출 완료를 확인받으세요!</p>
+      <button class="btn btn-secondary hidden" id="btnRetry">다시 제출하기</button>
+    </div>
+  </section>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
