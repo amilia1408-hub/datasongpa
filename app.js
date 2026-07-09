@@ -80,15 +80,30 @@ const state = {
 };
 
 const SCREEN_WEIGHT = { "0":1,"1":2,"2":3,"3":4,"4":5,"5":6,"6":7,"7":8,"8":9,"done":9 };
+const NAV_ORDER = ["0","1","2","3","4","5","6","7","8"];
 const TOTAL = 9;
+let currentScreen = "0";
 
 function showScreen(name) {
   document.querySelectorAll(".screen").forEach(el => el.classList.add("hidden"));
   document.querySelector(`.screen[data-screen="${name}"]`).classList.remove("hidden");
+  currentScreen = name;
   const cur = SCREEN_WEIGHT[name];
   document.getElementById("progressFill").style.width = (cur / TOTAL * 100) + "%";
   document.getElementById("progressText").textContent = name === "done" ? "" : `${cur}/${TOTAL} 화면`;
+
+  // 첫 화면·완료 화면에서는 이전 버튼 숨김
+  const backBtn = document.getElementById("btnBack");
+  const idx = NAV_ORDER.indexOf(name);
+  if (idx > 0) backBtn.classList.remove("hidden");
+  else backBtn.classList.add("hidden");
+
   window.scrollTo(0, 0);
+}
+
+function goBack() {
+  const idx = NAV_ORDER.indexOf(currentScreen);
+  if (idx > 0) showScreen(NAV_ORDER[idx - 1]);
 }
 
 /* ===== 척도 렌더러 (5점/6점 공통) ===== */
@@ -312,7 +327,8 @@ function buildScreen7() {
     input.type = "radio";
     input.name = "choice";
     input.value = letter;
-    input.addEventListener("change", () => {
+    if (state.choice === letter) { input.checked = true; lbl.classList.add("checked"); }
+    input.addEventListener("click", () => {
       state.choice = letter;
       document.querySelectorAll("#choiceRadios .radio-box").forEach(b => b.classList.remove("checked"));
       lbl.classList.add("checked");
@@ -410,6 +426,7 @@ function submitSurvey() {
 }
 
 /* ===== 초기화 ===== */
+document.getElementById("btnBack").addEventListener("click", goBack);
 initScreen0();
 initScreen1();
 initScreen2();
